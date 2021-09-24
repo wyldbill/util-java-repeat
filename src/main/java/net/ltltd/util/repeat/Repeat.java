@@ -41,7 +41,7 @@ public final class Repeat {
     }
 
     /**
-     * Obtain a list of specified legth which contains references to a supplied object
+     * Obtain a list of specified length which contains references to a supplied object
      *
      * @param t   the Object to fill the list
      * @param n   the length of the returned list
@@ -128,13 +128,13 @@ public final class Repeat {
      * Invoke a Supplier n times, returning the results as a Stream. An internal utility method.
      * If an invocation is
      *
-     * @param n        the times to invoke the Supplier
+     * @param n        the times to invoke the Supplier. if <= 0 the Stream will be empty
      * @param supplier the Supplier from which to obtain values
      * @param <T>      the type of the things retrieved from the Supplier and returned in the Stream
      * @return a Stream of values in order of invocation results
      */
     private static <T> Stream<T> limitedSupplier(int n, Supplier<T> supplier) {
         //TODO Add error handling
-        return streamOf(supplier).limit(Math.max(n, 0)).map(i -> supplier.get());
+        return streamOf(supplier).limit(Math.max(n, 0)).map(Supplier::get);
     }
 }

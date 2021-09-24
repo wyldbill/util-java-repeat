@@ -1,2 +1,2 @@
 # util-java-repeat
-a small utility library for repeating things 
+a small java library for repeating things 

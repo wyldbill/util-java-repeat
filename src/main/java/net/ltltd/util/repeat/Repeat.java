@@ -1,7 +1,7 @@
 /*
- *     LTLTD - Repeat Java Utility - A small Java utility repeat things.
+ *     LTLTD - Repeat Java Utility - A small Java library for repeating things.
  *     Copyright (C) 2021  Littlethunder Limited/William Dixon
- *     code@ltltd.com
+ *     code@ltltd.net
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * A set of Utilities which repeat or sequentially execute things
+ * A small library for repeating or sequentially executing things
  */
 public final class Repeat {
 
@@ -58,7 +58,7 @@ public final class Repeat {
      *
      * @param t   the Object to stream
      * @param <T> the type of the Object to Stream
-     * @return a Stream which continually provides references to t
+     * @return a Stream which continually provides references to t. t may be null.
      */
     public static <T> Stream<T> streamOf(T t) {
         return Stream.generate(() -> t);
@@ -67,7 +67,7 @@ public final class Repeat {
     /**
      * Call an IntConsumer with a range of Integers, starting at 0.
      *
-     * @param n        upper bound, exclusive. IN the case, the number of invocations as well
+     * @param n upper bound, exclusive. In this case, the number of invocations as well
      * @param consumer the IntConsumer invoked with each value in the range
      */
     public static void invokeRange(int n, IntConsumer consumer) {
@@ -78,9 +78,9 @@ public final class Repeat {
     /**
      * Call an IntConsumer with a range of Integers, starting at lower and ending exclusively at upper.
      *
-     * @param lower    lower bound inclusive
+     * @param lower    lower bound, inclusive
      * @param upper    upper bound, exclusive.
-     * @param consumer consumer the IntConsumer invoked with each value in the range
+     * @param consumer the IntConsumer invoked sequentially with each value in the range
      */
     public static void invokeRange(int lower, int upper, IntConsumer consumer) {
         //TODO Add error handling
@@ -88,7 +88,7 @@ public final class Repeat {
     }
 
     /**
-     * invoke a Supplier n times, discarding the results
+     * Invoke a Supplier n times, discarding the results
      *
      * @param n        the number of invocations
      * @param supplier the Supplier to obtain values to discard
@@ -99,7 +99,7 @@ public final class Repeat {
     }
 
     /**
-     * Invoke a Supplier n times, returning the result of the invocation in a List.
+     * Invoke a Supplier n times, returning the result of the invocations in a List.
      *
      * @param n        the times to invoke the Supplier and the length of the returned List
      * @param supplier the Supplier from which to obtain values
@@ -112,13 +112,14 @@ public final class Repeat {
     }
 
     /**
-     * Invoke a Supplier n times invoking the supplied Consumer with the result.
+     * Invoke a Supplier n times invoking the supplied Consumer with each result.
      *
      * @param n        the times to invoke the supplier and subsequently the Consumer
      * @param supplier the Supplier from which to obtain values
+     * @param consumer the Consumer to which to provide values
      * @param <T>      the type of the things retrieved from the Supplier submitted to the Consumer
      */
-    public static <T> void pipeN(int n, Supplier<T> supplier, Consumer<T> consumer) {
+    public static <T> void pipeN(int n, Supplier<? extends T> supplier, Consumer<T> consumer) {
         //TODO Add error handling
         limitedSupplier(n, supplier).forEach(consumer);
     }
@@ -133,6 +134,7 @@ public final class Repeat {
      * @return a Stream of values in order of invocation results
      */
     private static <T> Stream<T> limitedSupplier(int n, Supplier<T> supplier) {
+        //TODO Add error handling
         return streamOf(supplier).limit(Math.max(n, 0)).map(i -> supplier.get());
     }
 }

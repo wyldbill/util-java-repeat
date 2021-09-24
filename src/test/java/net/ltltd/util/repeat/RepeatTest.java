@@ -1,7 +1,7 @@
 /*
- *     LTLTD - Repeat Java Utility - A small Java utility repeat things.
+ *     LTLTD - Repeat Java Utility - A small Java library for repeating things.
  *     Copyright (C) 2021  Littlethunder Limited/William Dixon
- *     code@ltltd.com
+ *     code@ltltd.net
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by

@@ -31,7 +31,6 @@ test {
     useJUnitPlatform()
 }
 
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -56,7 +55,7 @@ publishing {
                         id = 'wyldbill'
                         name = 'William Dixon'
                         email = 'code@ltltd.net'
-                        organization = 'Littlthunder Limited'
+                        organization = 'Littlethunder Limited'
                         organizationUrl= 'https://github.com/wyldbill'
                     }
                 }

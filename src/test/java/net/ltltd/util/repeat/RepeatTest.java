@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -38,22 +39,15 @@ class RepeatTest {
     /**
      * Test Repeat listOf function
      */
+    @SuppressWarnings("StringEquality")
     @Test
     void listOfTest() {
-        List<String> list = listOf(FOO, 5);
-        assertEquals(5, list.size()); //simple case
-        for (String s : list) {
-            assertSame(s, FOO); //check instance is the same
-        }
-        list = listOf(FOO, 0);  //check 0 n parameter
-        assertTrue(list.isEmpty());
-        list = listOf(FOO, -1); ///check negative parameter
-        assertTrue(list.isEmpty());
-        list = listOf(null, 4); //check making list of nulls
-        assertEquals(4, list.size());
-        for (String s : list) {
-            assertNull(s);
-        }
+        assertEquals(5, listOf(FOO, 5).size()); //simple case
+        assertEquals(5,listOf(FOO, 5).stream().filter(s -> s == FOO).count());
+        assertTrue(listOf(FOO, 0).isEmpty());   //check 0 n parameter
+        assertTrue(listOf(FOO, -1).isEmpty());  //check negative parameter
+        assertEquals(4, listOf(null, 4).size());    //check making list of nulls
+        assertEquals(4,listOf(null, 4).stream().filter(Objects::isNull).count());
     }
 
     @SuppressWarnings("StringEquality")
@@ -63,7 +57,8 @@ class RepeatTest {
         assertNotNull(s);
         assertSame(FOO, streamOf(FOO).findFirst().orElse(null));
         assertEquals(0, streamOf(FOO).limit(200).filter(f -> FOO != f).count());
-        assertEquals(0, streamOf(null).limit(200).filter(f -> f != null).count());
+        assertEquals(0, streamOf(null).limit(200).filter(Objects::nonNull).count());
+        assertEquals(200, streamOf(null).limit(200).filter(Objects::isNull).count());
     }
 
     @Test
@@ -81,25 +76,30 @@ class RepeatTest {
         invokeRange(-2, 5, list::add);
         assertEquals(List.of(-2, -1, 0, 1, 2, 3, 4), list);
         list.clear();
-        invokeRange(5, 0, list::add);
+        invokeRange(-5, -2, list::add);
+        assertEquals(List.of(-5, -4, -3), list);
+        list.clear();
+        invokeRange(3,2,list::add);
         assertEquals(EMPTY_LIST, list);
+        invokeRange(0, 0, list::add);
+        assertEquals(EMPTY_LIST, list);
+        invokeRange(3, 3, list::add);
+        assertEquals(EMPTY_LIST, list);
+        invokeRange(1, 4, null);
     }
 
     @Test
-    void testInvokeRangeTest() {
+    void invokeRangeTest() {
         List<Integer> list = new ArrayList<>();
         invokeRange(5, list::add);
         assertEquals(List.of(0, 1, 2, 3, 4), list);
         list.clear();
         invokeRange(0, list::add);
         assertEquals(EMPTY_LIST, list);
-        list.clear();
-        invokeRange(5, list::add);
-        assertEquals(List.of(0, 1, 2, 3, 4), list);
-        list.clear();
         invokeRange(-5, list::add);
         assertEquals(EMPTY_LIST, list);
-        list.clear();
+        invokeRange(3, null);
+        assertEquals(EMPTY_LIST, list);
     }
 
     @Test
@@ -111,6 +111,8 @@ class RepeatTest {
         assertEquals(5, i.get());
         tossN(-1, i::incrementAndGet);
         assertEquals(5, i.get());
+        tossN(-1, null);
+        assertEquals(5, i.get());
     }
 
     @Test
@@ -120,25 +122,39 @@ class RepeatTest {
         assertEquals(List.of(6), getN(1, i::incrementAndGet));
         assertEquals(EMPTY_LIST, getN(0, i::incrementAndGet));
         assertEquals(EMPTY_LIST, getN(-1, i::incrementAndGet));
+        assertEquals(EMPTY_LIST, getN(4, null));
     }
 
     @Test
     void pipeNTest() {
         AtomicInteger i = new AtomicInteger();
         List<Integer> list = new ArrayList<>();
-        Consumer<Integer> c = new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) {
-                list.add(integer);
-            }
-        };
+        Consumer<Integer> c = list::add;
+        //first invocation
+        List<Integer> resList = List.of(1, 2, 3, 4, 5);
         pipeN(5, i::incrementAndGet, c);
-        assertEquals(List.of(1, 2, 3, 4, 5), list);
+        assertEquals(resList, list);
+        assertEquals(5,i.get());
+        // next invocation
+        resList = List.of(1, 2, 3, 4, 5,6);
         pipeN(1, i::incrementAndGet, c);
-        assertEquals(List.of(1,2,3,4,5,6), list);
+        assertEquals(resList, list);
+        assertEquals(6,i.get());
+        // no invocations
         pipeN(0, i::incrementAndGet, c);
-        assertEquals(List.of(1,2,3,4,5,6), list);
+        assertEquals(resList, list);
+        assertEquals(6,i.get());
+        // negative invocations
         pipeN(-1, i::incrementAndGet, c);
-        assertEquals(List.of(1,2,3,4,5,6), list);
+        assertEquals(resList, list);
+        assertEquals(6,i.get());
+        // null supplier
+        pipeN(3, null, c);
+        assertEquals(resList, list);
+        assertEquals(6,i.get());
+        // null consumer
+        pipeN(3, i::incrementAndGet, null);
+        assertEquals(resList, list);
+        assertEquals(6,i.get());
     }
 }

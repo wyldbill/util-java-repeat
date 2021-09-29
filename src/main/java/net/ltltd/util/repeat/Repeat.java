@@ -50,7 +50,7 @@ public final class Repeat {
      */
     public static <T> List<T> listOf(T t, int n) {
         return (n > -1) ?
-            new ArrayList<>(Collections.nCopies(n, t)) : Collections.emptyList();
+                new ArrayList<>(Collections.nCopies(n, t)) : Collections.emptyList();
     }
 
     /**
@@ -67,39 +67,40 @@ public final class Repeat {
     /**
      * Call an IntConsumer with a range of Integers, starting at 0.
      *
-     * @param n upper bound, exclusive. In this case, the number of invocations as well
+     * @param n        upper bound, exclusive. In this case, the number of invocations as well
      * @param consumer the IntConsumer invoked with each value in the range
      */
     public static void invokeRange(int n, IntConsumer consumer) {
-        //TODO Add error handling
         invokeRange(0, n, consumer);
     }
 
     /**
      * Call an IntConsumer with a range of Integers, starting at lower and ending exclusively at upper.
+     * If upper <= lower, consumer will not be invoked.
      *
      * @param lower    lower bound, inclusive
      * @param upper    upper bound, exclusive.
      * @param consumer the IntConsumer invoked sequentially with each value in the range
      */
     public static void invokeRange(int lower, int upper, IntConsumer consumer) {
-        //TODO Add error handling
+        if (consumer == null) return;   //nothing to do
         IntStream.range(lower, upper).forEach(consumer);
     }
 
     /**
-     * Invoke a Supplier n times, discarding the results
+     * Invoke a Supplier n times, discarding the results. If supplier is null, no operations are performed.
      *
      * @param n        the number of invocations
      * @param supplier the Supplier to obtain values to discard
      */
     public static void tossN(int n, Supplier<?> supplier) {
-        //TODO Add error handling
+        if (supplier == null) return;
         streamOf(supplier).limit(Math.max(n, 0)).forEach(Supplier::get);
     }
 
     /**
-     * Invoke a Supplier n times, returning the result of the invocations in a List.
+     * Invoke a Supplier n times, returning the result of the invocations in a List. If Supplier is null
+     * an empty List is returned.
      *
      * @param n        the times to invoke the Supplier and the length of the returned List
      * @param supplier the Supplier from which to obtain values
@@ -107,12 +108,13 @@ public final class Repeat {
      * @return a list of resulting in order of invocation results
      */
     public static <T> List<T> getN(int n, Supplier<T> supplier) {
-        //TODO Add error handling
+        if (supplier == null) return Collections.emptyList();
         return limitedSupplier(n, supplier).collect(Collectors.toList());
     }
 
     /**
-     * Invoke a Supplier n times invoking the supplied Consumer with each result.
+     * Invoke a Supplier n times invoking the supplied Consumer with each result. If supplier or consumer is null
+     * no invocations of supplier or consumer occur.
      *
      * @param n        the times to invoke the supplier and subsequently the Consumer
      * @param supplier the Supplier from which to obtain values
@@ -120,7 +122,7 @@ public final class Repeat {
      * @param <T>      the type of the things retrieved from the Supplier submitted to the Consumer
      */
     public static <T> void pipeN(int n, Supplier<? extends T> supplier, Consumer<T> consumer) {
-        //TODO Add error handling
+        if (consumer == null) return;
         limitedSupplier(n, supplier).forEach(consumer);
     }
 
@@ -134,7 +136,7 @@ public final class Repeat {
      * @return a Stream of values in order of invocation results
      */
     private static <T> Stream<T> limitedSupplier(int n, Supplier<T> supplier) {
-        //TODO Add error handling
+        if (supplier == null) return Stream.of();
         return streamOf(supplier).limit(Math.max(n, 0)).map(Supplier::get);
     }
 }

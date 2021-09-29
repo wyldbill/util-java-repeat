@@ -2,13 +2,16 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    //id("io.github.gradle-nexus.publish-plugin") version "«version»"
 }
 
 group 'net.ltltd'
-version '0.1.0-SNAPSHOT'
+version '0.0.1'
+//project.archivesBaseName = 'util-repeat'
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
 
 repositories {
     mavenCentral()
@@ -28,6 +31,7 @@ test {
     useJUnitPlatform()
 }
 
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -37,7 +41,10 @@ publishing {
                 name = 'LTLTD Utilities - Repeat'
                 description = 'A small Java library which provides ways to repeat things'
                 url = 'https://github.com/wyldbill/util-java-repeat'
-                // properties = []
+                packaging = 'jar'
+                properties = [
+                    packaging : "jar"
+                ]
                 licenses {
                     license {
                         name = 'GNU GENERAL PUBLIC LICENSE - Version 3.0'
@@ -49,6 +56,8 @@ publishing {
                         id = 'wyldbill'
                         name = 'William Dixon'
                         email = 'code@ltltd.net'
+                        organization = 'Littlthunder Limited'
+                        organizationUrl= 'https://github.com/wyldbill'
                     }
                 }
                 scm {
@@ -59,13 +68,31 @@ publishing {
             }
             repositories {
                 maven {
-                    // change URLs to point to your repos, e.g. http://my.org/repo
-                    def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
                     def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+                    //def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                    def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    if (admin) {
+                        credentials {
+                            username sonatypeUsername
+                            password sonatypePassword
+                        }
+                    }
                 }
             }
         }
 
     }
 }
+signing {
+    sign publishing.publications.mavenJava
+}
+
+// nexusPublishing {
+//     repositories {
+//         sonatype {  //only for users registered in Sonatype after 24 Feb 2021
+//             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+//             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+//         }
+//     }
+// }

@@ -1,9 +1,13 @@
 &check; get sonatype access  
-&cross; get archive building  
-&cross; get javadoc archive building  
-&cross; get source archive building  
-&cross; create POM  
-&cross; get GPG working  
-&cross; get artifact uploading to maven central  
+&check; get archive building  
+&check; get javadoc archive building  
+&check; get source archive building  
+&check; create POM  
+&check; get GPG working  
+&check; get artifact uploading to maven central
+&check; Handle Exceptions in all methods  
 &cross; Add examples to Javadoc  
-&cross; Handle Exceptions in all methods  
+&cross; Add examples to README  
+&cross; Modularize  
+
+

@@ -1,5 +1,5 @@
 
-  name: Build
+  name: SQBuild
   on:
     push:
       branches:

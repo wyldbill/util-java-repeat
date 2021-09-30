@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    id "org.sonarqube" version "3.3"
     //id("io.github.gradle-nexus.publish-plugin") version "«version»"
 }
 
@@ -29,6 +30,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "wyldbill_util-java-repeat"
+    property "sonar.organization", "wyldbill"
+    property "sonar.host.url", https://sonarcloud.io
+  }
 }
 
 publishing {

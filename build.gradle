@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'maven-publish'
     id 'signing'
-    id "org.sonarqube" version "3.3"
-    //id("io.github.gradle-nexus.publish-plugin") version "«version»"
+    id 'org.sonarqube' version '3.3'
+//     id("io.github.gradle-nexus.publish-plugin") version "«version»"
 }
 
 group 'net.ltltd'
@@ -36,7 +37,7 @@ sonarqube {
   properties {
     property "sonar.projectKey", "wyldbill_util-java-repeat"
     property "sonar.organization", "wyldbill"
-    property "sonar.host.url", https://sonarcloud.io
+    property "sonar.host.url", "https://sonarcloud.io"
   }
 }
 
@@ -94,6 +95,21 @@ publishing {
 }
 signing {
     sign publishing.publications.mavenJava
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }
 
 // nexusPublishing {

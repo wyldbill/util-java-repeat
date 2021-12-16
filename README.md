@@ -1,10 +1,17 @@
 # util-java-repeat
 a small java library for repeating things
 
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wyldbill_util-java-repeat&metric=alert_status)](https://sonarcloud.io/dashboard?id=wyldbill_util-java-repeat)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=wyldbill_util-java-repeat&metric=coverage)](https://sonarcloud.io/dashboard?id=wyldbill_util-java-repeat)
+![GitHub](https://img.shields.io/github/license/wyldbill/util-java-repeat)
+![GitHub last commit](https://img.shields.io/github/last-commit/wyldbill/util-java-repeat)
+
 ## listOf
 Use `listOf` to get a List fill with references to a single Object. This is
 basically `Collections.nCopies()` but the List returned is mutable, and values < 0 
 result in an empty List instead or throwing an `IllegalArgumentException`.
+
 
     // Create a List containing "FOO" five times.
     List<String> list = Repeat.listOf("FOO", 5);

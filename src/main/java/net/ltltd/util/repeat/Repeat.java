@@ -76,7 +76,7 @@ public final class Repeat {
 
     /**
      * Call an IntConsumer with a range of Integers, starting at lower and ending exclusively at upper.
-     * If upper <= lower, consumer will not be invoked.
+     * If upper &lt;= lower, consumer will not be invoked.
      *
      * @param lower    lower bound, inclusive
      * @param upper    upper bound, exclusive.

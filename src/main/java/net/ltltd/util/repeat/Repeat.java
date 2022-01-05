@@ -1,6 +1,6 @@
 /*
  *     LTLTD - Repeat Java Utility - A small Java library for repeating things.
- *     Copyright (C) 2021  Littlethunder Limited/William Dixon
+ *     Copyright (C) 2021 Littlethunder Limited/William Dixon
  *     code@ltltd.net
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -83,7 +83,9 @@ public final class Repeat {
      * @param consumer the IntConsumer invoked sequentially with each value in the range
      */
     public static void invokeRange(int lower, int upper, IntConsumer consumer) {
-        if (consumer == null) return;   //nothing to do
+        if (consumer == null) {
+            return;   //nothing to do
+        }
         IntStream.range(lower, upper).forEach(consumer);
     }
 
@@ -94,7 +96,9 @@ public final class Repeat {
      * @param supplier the Supplier to obtain values to discard
      */
     public static void tossN(int n, Supplier<?> supplier) {
-        if (supplier == null) return;
+        if (supplier == null) {
+            return; //nothing to do
+        }
         streamOf(supplier).limit(Math.max(n, 0)).forEach(Supplier::get);
     }
 
@@ -108,7 +112,9 @@ public final class Repeat {
      * @return a list of resulting in order of invocation results
      */
     public static <T> List<T> getN(int n, Supplier<T> supplier) {
-        if (supplier == null) return Collections.emptyList();
+        if (supplier == null) {
+            return Collections.emptyList();
+        }
         return limitedSupplier(n, supplier).collect(Collectors.toList());
     }
 
@@ -122,7 +128,9 @@ public final class Repeat {
      * @param <T>      the type of the things retrieved from the Supplier submitted to the Consumer
      */
     public static <T> void pipeN(int n, Supplier<? extends T> supplier, Consumer<T> consumer) {
-        if (consumer == null) return;
+        if (consumer == null) {
+            return; //nothing to do
+        }
         limitedSupplier(n, supplier).forEach(consumer);
     }
 
@@ -136,7 +144,9 @@ public final class Repeat {
      * @return a Stream of values in order of invocation results
      */
     private static <T> Stream<T> limitedSupplier(int n, Supplier<T> supplier) {
-        if (supplier == null) return Stream.of();
+        if (supplier == null) {
+            return Stream.of();
+        }
         return streamOf(supplier).limit(Math.max(n, 0)).map(Supplier::get);
     }
 }

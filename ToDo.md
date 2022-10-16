@@ -8,6 +8,6 @@
 &check; Handle Exceptions in all methods  
 &cross; Add examples to Javadoc  
 &cross; Add examples to README  
-&cross; Modularize  
+&check; Modularize  
 
 

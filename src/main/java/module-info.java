@@ -1,4 +1,4 @@
-/*
+/**
  *     LTLTD - Repeat Java Utility - A small Java library for repeating things.
  *     Copyright (C) 2021 Littlethunder Limited/William Dixon
  *     code@ltltd.net

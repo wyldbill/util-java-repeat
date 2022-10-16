@@ -1,5 +1,4 @@
 name: SonarQube Build
-
 on:
   push:
     branches:

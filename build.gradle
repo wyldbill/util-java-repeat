@@ -78,6 +78,7 @@ publishing {
             repositories {
                 maven {
                     def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+                    //def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots
                     //def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                     def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
@@ -110,12 +111,3 @@ jacocoTestReport {
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
-
-// nexusPublishing {
-//     repositories {
-//         sonatype {  //only for users registered in Sonatype after 24 Feb 2021
-//             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-//             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-//         }
-//     }
-// }

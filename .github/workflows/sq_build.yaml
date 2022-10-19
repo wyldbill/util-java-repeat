@@ -33,5 +33,14 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
+          ST_PWD: ${{secrets.ST_PWD}}
+          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+          ST_UID: ${{secrets.ST_UID}}
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            build
+            sonarqube
+            -Pst_pwd=${{env.ST_PWD}}
+            -Psonar_token=${{env.SONAR_TOKEN}}
+            -Pst_uid=${{env.ST_UID}}

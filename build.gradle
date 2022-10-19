@@ -14,7 +14,10 @@ version '0.0.1'
 sourceCompatibility = 11
 targetCompatibility = 11
 
-def sonarLogin = local ? project.properties['sonar.token'] : "${{ secrets.SONAR_TOKEN }}"
+test.doFirst {
+    println "*** ENVIRONMENT VARIABLE DUMP ***"
+    environment.each { k, v -> println "${k}:${v}" }
+}
 
 repositories {
     mavenCentral()
@@ -39,7 +42,7 @@ sonarqube {
     property "sonar.projectKey", "wyldbill_util-java-repeat"
     property "sonar.organization", "wyldbill"
     property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.login", sonarLogin
+    property "sonar.login", project.property('sonar_token')
   }
 }
 
@@ -84,16 +87,9 @@ publishing {
                     //def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                     def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                    if (local) {
-                        credentials {
-                            username sonatypeUsername
-                            password sonatypePassword
-                        }
-                    } else {
-                        credentials {
-                            username ${{ secrets.SONATYPE_UID }}
-                            password ${{ secrets.SONATYPE_PWD }}
-                        }
+                    credentials {
+                       password project.property('st_pwd')
+                       username project.property('st_uid')
                     }
                 }
             }

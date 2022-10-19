@@ -24,8 +24,14 @@ jobs:
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1.0.4
     - name: Build with Gradle
+      env:
+        ST_PWD: ${{secrets.ST_PWD}}
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+        ST_UID: ${{secrets.ST_UID}}
       uses: gradle/gradle-build-action@v2
       with:
         arguments: |
           build
-          -Plocal=false
+          -Pst_pwd="$ST_PWD"
+          -Psonar.token="$SONAR_TOKEN"
+          -Pst_uid="$ST_UID"

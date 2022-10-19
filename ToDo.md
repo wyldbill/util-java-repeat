@@ -6,8 +6,9 @@
 &check; get GPG working  
 &check; get artifact uploading to maven central
 &check; Handle Exceptions in all methods  
-&cross; Add examples to Javadoc  
-&cross; Add examples to README  
-&cross; Modularize  
+&check; Add examples to Javadoc  
+&check; Add examples to README  
+&check; Modularize  
+&cross; get puplishing to Sonatype
 
 

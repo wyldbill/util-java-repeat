@@ -41,7 +41,9 @@ public final class Repeat {
     }
 
     /**
-     * Obtain a list of specified length which contains references to a supplied object
+     * Obtain a list of specified length which contains references to a supplied object<pre>{@code
+     *     // Create a Stream repeating "FOO"
+     *     Stream<String> s1 = Repeat.StreamOf("FOO");}</pre>
      *
      * @param t   the Object to fill the list
      * @param n   the length of the returned list
@@ -54,7 +56,13 @@ public final class Repeat {
     }
 
     /**
-     * Create an infinite Stream of references to a supplied Object
+     * Create an infinite Stream of references to a supplied Object<pre>{@code
+     *     // Create a Stream repeating "FOO"
+     *     Stream<String> s1 = Repeat.StreamOf("FOO");
+     *
+     *     // Create a Stream of Suppliers<String> representing the times
+     *     // when the String is obtained from the Stream
+     *     Stream<Supplier<String>> s2 = Repeat.streamOf(()-> Instant.now().toString()); }</pre>
      *
      * @param t   the Object to stream
      * @param <T> the type of the Object to Stream
@@ -65,8 +73,9 @@ public final class Repeat {
     }
 
     /**
-     * Call an IntConsumer with a range of Integers, starting at 0.
-     *
+     * Call an IntConsumer with a range of Integers, starting at 0.<pre>{@code
+     *     //Print the ints from 0 to 10
+     *     Repeat.invokeRange(11, System.out::print);}</pre>
      * @param n        upper bound, exclusive. In this case, the number of invocations as well
      * @param consumer the IntConsumer invoked with each value in the range
      */
@@ -76,7 +85,9 @@ public final class Repeat {
 
     /**
      * Call an IntConsumer with a range of Integers, starting at lower and ending exclusively at upper.
-     * If upper &lt;= lower, consumer will not be invoked.
+     * If upper &lt;= lower, consumer will not be invoked.<pre>{@code
+     *     //Print the ints from 5 to 10
+     *     Repeat.invokeRange(5, 11, System.out::print);}</pre>
      *
      * @param lower    lower bound, inclusive
      * @param upper    upper bound, exclusive.
@@ -90,7 +101,9 @@ public final class Repeat {
     }
 
     /**
-     * Invoke a Supplier n times, discarding the results. If supplier is null, no operations are performed.
+     * Invoke a Supplier n times, discarding the results. If supplier is null, no operations are performed.<pre>{@code
+     *     //Pop 10 items off a Deque
+     *     Repeat.tossN(10, deque::pop);}</pre>
      *
      * @param n        the number of invocations
      * @param supplier the Supplier to obtain values to discard
@@ -105,6 +118,9 @@ public final class Repeat {
     /**
      * Invoke a Supplier n times, returning the result of the invocations in a List. If Supplier is null
      * an empty List is returned.
+     * <pre>{@code
+     *     //get the first 5 items from a Deque
+     *     List<String> firstFive = Repeat.getN(5,deque::pop);}</pre>
      *
      * @param n        the times to invoke the Supplier and the length of the returned List
      * @param supplier the Supplier from which to obtain values
@@ -121,6 +137,9 @@ public final class Repeat {
     /**
      * Invoke a Supplier n times invoking the supplied Consumer with each result. If supplier or consumer is null
      * no invocations of supplier or consumer occur.
+     * <pre>{@code
+     *     //print the first 10 items from a Deque
+     *     Repeat.pipeN(10,deque::pop, System.out::println);}</pre>
      *
      * @param n        the times to invoke the supplier and subsequently the Consumer
      * @param supplier the Supplier from which to obtain values
@@ -136,7 +155,6 @@ public final class Repeat {
 
     /**
      * Invoke a Supplier n times, returning the results as a Stream. An internal utility method.
-     * If an invocation is
      *
      * @param n        the times to invoke the Supplier. if <= 0 the Stream will be empty
      * @param supplier the Supplier from which to obtain values

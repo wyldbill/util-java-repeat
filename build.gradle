@@ -3,7 +3,7 @@ plugins {
     id 'jacoco'
     id 'maven-publish'
     id 'signing'
-    id 'org.sonarqube' version '3.3'
+    id 'org.sonarqube' version '3.4.0.2513'
 //     id("io.github.gradle-nexus.publish-plugin") version "«version»"
 }
 
@@ -25,8 +25,8 @@ java {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 test {
@@ -78,6 +78,7 @@ publishing {
             repositories {
                 maven {
                     def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+                    //def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots
                     //def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                     def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
@@ -96,7 +97,6 @@ publishing {
 signing {
     sign publishing.publications.mavenJava
 }
-
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
@@ -111,12 +111,3 @@ jacocoTestReport {
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
-
-// nexusPublishing {
-//     repositories {
-//         sonatype {  //only for users registered in Sonatype after 24 Feb 2021
-//             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-//             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-//         }
-//     }
-// }

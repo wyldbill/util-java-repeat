@@ -27,26 +27,40 @@ on an object multiple times.
 
     // Create a Stream repeating "FOO"
     Stream<String> s1 = Repeat.StreamOf("FOO");
+
     // Create a Stream of Suppliers<String> representing the times 
     // when the String is obtained from the Stream
     Stream<Supplier<String>> s2 = Repeat.streamOf(()-> Instant.now().toString()); 
 
-    public static void invokeRange(int n, IntConsumer consumer) {
-        invokeRange(0, n, consumer);
-    }
-    public static void invokeRange(int lower, int upper, IntConsumer consumer) {
-        if (consumer == null) return;   //nothing to do
-        IntStream.range(lower, upper).forEach(consumer);
-    }
-    public static void tossN(int n, Supplier<?> supplier) {
-        if (supplier == null) return;
-        streamOf(supplier).limit(Math.max(n, 0)).forEach(Supplier::get);
-    }
-    public static <T> List<T> getN(int n, Supplier<T> supplier) {
-        if (supplier == null) return Collections.emptyList();
-        return limitedSupplier(n, supplier).collect(Collectors.toList());
-    }
-    public static <T> void pipeN(int n, Supplier<? extends T> supplier, Consumer<T> consumer) {
-        if (consumer == null) return;
-        limitedSupplier(n, supplier).forEach(consumer);
-    }
+## tossN
+Use `tossN` to throw away n values from a Supplier. This allows you to skip n 
+items from something like a Collection, Result or similar.
+    
+    //Pop 10 items off a Deque
+    Repeat.tossN(10, deque::pop);
+
+## getN
+Use `getN` to retrieve a List of n items from a Supplier. A companion to tossN,
+is actually cares about what's returned from the Supplier.
+    
+    //get the first 5 items from a Deque
+    List<String> firstFive = Repeat.getN(5,deque::pop);
+
+## pipeN
+Use `pipeN` to retrieve n items from a Supplier and pass them to a consumer. 
+Useful for sequentially batch processing items from a Supplier.
+    
+    //print the first 10 items from a Deque
+    Repeat.pipeN(10,deque::pop, System.out::println);
+
+## invokeRange
+Use `streainvokeRangemOf` to invoice an IntConsumer with a range of ints
+from 0 to n, exclusive or from n inclusive to m exclusive.
+
+    //Print the ints from 0 to 10
+    Repeat.invokeRange(11, System.out::print);
+
+    //Print the ints from 5 to 10
+    Repeat.invokeRange(5, 11, System.out::print);
+
+

@@ -14,11 +14,6 @@ version '0.0.1'
 sourceCompatibility = 11
 targetCompatibility = 11
 
-test.doFirst {
-    println "*** ENVIRONMENT VARIABLE DUMP ***"
-    environment.each { k, v -> println "${k}:${v}" }
-}
-
 repositories {
     mavenCentral()
 }
@@ -109,8 +104,8 @@ jacocoTestReport {
 
 jacocoTestReport {
     reports {
-        xml.required = true
-        csv.required = true
+        xml.enabled true
+        csv.enabled true
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }

@@ -1,27 +1,116 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'maven-publish'
+    id 'signing'
+    id 'org.sonarqube' version '3.4.0.2513'
+//     id("io.github.gradle-nexus.publish-plugin") version "«version»"
 }
 
 group 'net.ltltd'
-version '0.1.0-SNAPSHOT'
+version '0.0.1'
+//project.archivesBaseName = 'util-repeat'
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+test.doFirst {
+    println "*** ENVIRONMENT VARIABLE DUMP ***"
+    environment.each { k, v -> println "${k}:${v}" }
+}
 
 repositories {
     mavenCentral()
 }
 
-jar {
-    archiveBaseName = 'utils-java-repeat'
-    archiveVersion =  '0.1.0'
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 test {
     useJUnitPlatform()
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "wyldbill_util-java-repeat"
+    property "sonar.organization", "wyldbill"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.login", project.property('sonar_token')
+  }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'util-repeat'
+            from components.java
+            pom {
+                name = 'LTLTD Utilities - Repeat'
+                description = 'A small Java library which provides ways to repeat things'
+                url = 'https://github.com/wyldbill/util-java-repeat'
+                packaging = 'jar'
+                properties = [
+                    packaging : "jar"
+                ]
+                licenses {
+                    license {
+                        name = 'GNU GENERAL PUBLIC LICENSE - Version 3.0'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'wyldbill'
+                        name = 'William Dixon'
+                        email = 'code@ltltd.net'
+                        organization = 'Littlethunder Limited'
+                        organizationUrl= 'https://github.com/wyldbill'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/wyldbill/util-java-repeat.git'
+                    developerConnection = 'scm:git:ssh://github.com/wyldbill/util-java-repeat.git'
+                    url = 'https://github.com/wyldbill/util-java-repeat'
+                }
+            }
+            repositories {
+                maven {
+                    def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+                    //def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots
+                    //def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                    def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    credentials {
+                       password project.property('st_pwd')
+                       username project.property('st_uid')
+                    }
+                }
+            }
+        }
+
+    }
+}
+signing {
+    sign publishing.publications.mavenJava
+}
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }

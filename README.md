@@ -4,6 +4,7 @@ a small java library for repeating things
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wyldbill_util-java-repeat&metric=alert_status)](https://sonarcloud.io/dashboard?id=wyldbill_util-java-repeat)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=wyldbill_util-java-repeat&metric=coverage)](https://sonarcloud.io/dashboard?id=wyldbill_util-java-repeat)
+[![CodeQL](https://github.com/wyldbill/util-java-repeat/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/wyldbill/util-java-repeat/actions/workflows/codeql-analysis.yml)
 ![GitHub](https://img.shields.io/github/license/wyldbill/util-java-repeat)
 ![GitHub last commit](https://img.shields.io/github/last-commit/wyldbill/util-java-repeat)
 

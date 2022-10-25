@@ -14,3 +14,6 @@ as well.
 
 https://github.com/gradle-nexus/publish-plugin/
 https://blog.solidsoft.pl/2015/09/08/deploy-to-maven-central-using-api-key-aka-auth-token/
+
+Other stuff
+[another tutorial](https://medium.com/@nmauti/sign-and-publish-on-maven-central-a-project-with-the-new-maven-publish-gradle-plugin-22a72a4bfd4b)

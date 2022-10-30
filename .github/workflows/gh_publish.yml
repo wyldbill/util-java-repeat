@@ -27,12 +27,18 @@ jobs:
           ST_PWD: ${{secrets.ST_PWD}}
           SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
           ST_UID: ${{secrets.ST_UID}}
+          GPG_KEY: ${{secrets.GPG_SECRET_KEY}}
+          GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
+          GPG_PWD: ${{secrets.GPG_SECRET_KEY_PASSWORD}}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
             publish
-            -Pst_pwd=${{env.ST_PWD}}
             -Psonar_token=${{env.SONAR_TOKEN}}
+            -Pst_pwd=${{env.ST_PWD}}
             -Pst_uid=${{env.ST_UID}}
             -Pgh_actor=${{env.GITHUB_TOKEN}}
             -Pgh_token=${{env.GITHUB_ACTOR}}
+            -PsigningKeyId=${{env.GPG_KEY_ID}}
+            -PsigningKey=${{env.GPG_KEY}}
+            -PsigningPassword=${{env.GPG_PWD}}

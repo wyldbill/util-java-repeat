@@ -1,7 +1,11 @@
 name: Publish package to GitHub Packages
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ github_publish ]
+#  pull_request:
+#    types: [ opened, synchronize, reopened ]
+#  release:
+#    types: [created]
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -17,8 +21,17 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/gradle/wrapper-validation-action@v1.0.4
       - name: Publish package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          ST_PWD: ${{secrets.ST_PWD}}
+          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+          ST_UID: ${{secrets.ST_UID}}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          arguments: |
+            publish
+            -Pst_pwd=${{env.ST_PWD}}
+            -Psonar_token=${{env.SONAR_TOKEN}}
+            -Pst_uid=${{env.ST_UID}}
+            -Pgh_actor=${{env.GITHUB_TOKEN}}
+            -Pgh_token=${{env.GITHUB_ACTOR}}

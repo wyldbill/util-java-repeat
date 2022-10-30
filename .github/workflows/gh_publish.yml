@@ -8,6 +8,7 @@ on:
 #    types: [created]
 jobs:
   publish:
+    name: publish gh
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,7 +20,7 @@ jobs:
           java-version: '11'
           distribution: 'zulu'
       - name: Validate Gradle wrapper
-        uses: gradle/gradle/wrapper-validation-action@v1.0.4
+        uses: gradle/wrapper-validation-action@v1.0.4
       - name: Publish package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
